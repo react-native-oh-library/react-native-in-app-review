@@ -1,6 +1,5 @@
 __tests__
 .vscode
-examples/
 coverage
 .idea
 node_modules/

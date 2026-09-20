@@ -1,0 +1,48 @@
+{
+  "modelVersion": "5.0.0",
+  "description": "Please describe the basic information.",
+  "dependencies": {
+    "@react-native-ohos/react-native-in-app-review": "file:../node_modules/@react-native-ohos/react-native-in-app-review/harmony/in_app_review.har"
+  },
+  "devDependencies": {},
+  "overrides": {
+    "@rnoh/react-native-openharmony": "file:../node_modules/@react-native-oh/react-native-harmony/react_native_openharmony_release.har",
+    "@react-native-ohos/react-native-in-app-review": "../node_modules/@react-native-ohos/react-native-in-app-review/harmony/in_app_review.har"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

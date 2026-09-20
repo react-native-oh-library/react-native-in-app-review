@@ -1,400 +1,380 @@
-# react-native-in-app-review
+> 文档模板：v0.4.2
 
-![npm](https://img.shields.io/npm/dw/react-native-in-app-review?logo=npm)
-[![npm downloads](https://img.shields.io/npm/dm/react-native-in-app-review.svg) ](//npmjs.com/package/react-native-in-app-review)
-![npm](https://img.shields.io/npm/v/react-native-in-app-review?logo=npm)
-![Travis (.com) branch](https://img.shields.io/travis/com/MinaSamir11/react-native-in-app-review/master)
-![Coveralls github branch](https://img.shields.io/coveralls/github/MinaSamir11/react-native-in-app-review/master)
+<p align="center">
+  <h1 align="center"> 
+    <code>react-native-in-app-review</code>
+  </h1>
+</p>
 
-The Google Play In-App Review API, App Store rating API let you prompt users to submit Play Store or App Store ratings and reviews without the inconvenience of leaving your app or game.
+本项目基于 [react-native-in-app-review](https://github.com/MinaSamir11/react-native-in-app-review) 开发。
 
-react-native in-app-review, to rate on Play Store, and App Store, Generally, the in-app review flow (see figure 1 for Play Store, figure 2 for ios) can be triggered at any time throughout the user journey of your app. During the flow, the user has the ability to rate your app using the 1 to 5-star system and to add an optional comment for Play Store only. Once submitted, the review is sent to the Play Store or App Store and eventually displayed.
+版本所属关系如下：
 
-## Would you like to support me?
-If you want to help me cheer up, I'm always looking for freelance tasks or a #part-time job, D.M on LinkedIn.
+| 三方库名称 | 三方库版本（npm地址） | 发布信息 | 支持RN版本 | Autolink | 编译API版本 | 社区基线版本 | 源码地址 |
+| ------------ | ------------ | ------------------------------ | ------------- | ------------- |------------------------ | ------------- | ------------- |
+| @react-native-ohos/react-native-in-app-review | [~4.4.3](https://www.npmjs.com/package/@react-native-ohos/react-native-in-app-review) | [Github Releases](https://github.com/react-native-oh-library/react-native-in-app-review/releases) | 0.84.* / 0.82.* / 0.77.* / 0.72.* | 是 | API12+ | 4.4.2 | [master](https://github.com/react-native-oh-library/react-native-in-app-review/tree/master) |
 
-If you would like to help me cheer up, buying me a cup of coffee will make my life really happy and give me a lot of energy.
-<a href="https://www.buymeacoffee.com/MinaSamir" target="_blank">
-  <img
-    src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
-    alt="Buy Me A Coffee"
-    width="200px"
-    height="55px"
-  />
-</a>
-<br />
+## 简介
 
-<br />
+`react-native-in-app-review` 是一个 **React Native 原生桥接库**（非 UI 组件库），用于在应用内引导用户提交应用商店评分与评论，用户无需跳转到商店详情页即可完成评分流程。
 
-[![Paypal](https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png)](https://paypal.me/MinaSamir111)
+| 平台 | 底层能力 |
+|------|---------|
+| Android | Google Play In-App Review API |
+| iOS | StoreKit `SKStoreReviewController` |
+| Android HMS | AppGallery Intent 应用内评论 |
+| **HarmonyOS** | AppGalleryKit `commentManager.showCommentDialog`（API 20+） |
 
-# iOS, android platform.
+**设计原则：**
 
-# System Rating App Store API
+- 成功 `resolve` **不代表**用户已评分（系统/API 不返回评分结果）
+- 应在用户完成核心体验后再触发，避免频繁打扰
+- HarmonyOS 上 `RequestInAppReview` 与 `requestInAppCommentAppGallery` 合流为同一原生实现
 
-[![N|Solid](https://docs-assets.developer.apple.com/published/1d5f982affa4088005ecd7c8d6edddff/patterns-ratings-and-reviews-intro@2x.png)](https://developer.apple.com/design/human-interface-guidelines/ios/system-capabilities/ratings-and-reviews/#system-rating-and-review-prompts)
+## 下载安装
 
-# Google Play In-App Review API
+进入到工程目录并输入以下命令：
 
-[![N|Solid](https://developer.android.com/images/google/play/in-app-review/iar-flow.jpg)](https://developer.android.com/guide/playcore/in-app-review)
+**npm**
 
-# Huawei App Gallery In-App Comment API
-
-[![N|Solid](https://github.com/MinaSamir11/react-native-in-app-review/blob/master/Example/huawei-in-app-comment.png)](https://developer.huawei.com/consumer/en/doc/development/AppGallery-connect-Guides/agc-comments-introduction-0000001063018306)
-
-# Getting Started
-
-## Installation
-
-If you use Expo to create a project, you can create a [development build](https://docs.expo.dev/development/introduction/) for your project using [EAS Build](https://docs.expo.dev/build/introduction/) or [eject to the bare workflow](https://docs.expo.dev/workflow/customizing/).
-
-Install React Native In App Review package
-
-## (A1) For The latest version and fixed issues and future releases do the following steps (Paid User):
-
-##The only thing a User has to do is to register here on https://www.paydevs.com and direct his package manager to our registry at https://npm.paydevs.com.
-
-Using npm or pnpm this means:
-
-```
-npm set registry https://npm.paydevs.com/
-npm login
-npm update
+```bash
+npm install @react-native-ohos/react-native-in-app-review
 ```
 
-And if you are using yarn:
+**yarn**
 
-```
-yarn config set registry https://npm.paydevs.com/
-yarn login
-yarn upgrade
-
+```bash
+yarn add @react-native-ohos/react-native-in-app-review
 ```
 
-## (A1.1)After you finished from sign-up in npm.paydevs, Go to [PayDevs, react-native-in-app-review](https://npm.paydevs.com/-/web/detail/react-native-in-app-review) to complete the package installation steps.
+> [!TIP] 业务侧 `import` 时使用原库名 `'react-native-in-app-review'`，而非鸿蒙包名 `@react-native-ohos/react-native-in-app-review`（RNOH 工程经 `harmony.alias` 自动映射）。
 
-## (B1) Normal Installation (Free User), (latest version will be avaliable on the public registry after 10 days from releasing on PayDevs).
+## Link
 
-```sh
-$ npm install react-native-in-app-review
+| 版本 | 是否支持 Autolink | RN 框架版本 |
+|------|------------------|------------|
+| ~4.4.3 | 是 | >=0.72 |
 
-```
+使用 AutoLink 的工程需要根据该文档配置，Autolink 框架指导文档：https://gitcode.com/CPF-RN/ohos_react_native/blob/master/docs/zh-cn/Autolinking.md
 
-OR
-
-```sh
-$ yarn add react-native-in-app-review
-```
-
-# Standard Method
-
-**React Native 0.60 and above**
-
-Linking is not required in React Native 0.60 and above.
-
-Don't forget to run `npx pod-install` after that !
-
-- If you do not have CocoaPods already installed on your machine, run `sudo gem install cocoapods` to set it up the first time, after that run `npx pod-install`
-
-**React Native 0.59 and below**
-
-Run `react-native link react-native-in-app-review` to link the react-native-in-app-review library.
-after following the instructions for your platform to link react-native-in-app-review into your project:
-
-### Manual Linking
-
-### iOS installation
+如您使用的版本支持 Autolink，并且工程已接入 Autolink，可跳过 Manual Link 配置。
 
 <details>
-  <summary>iOS details</summary>
+  <summary>Manual Link：此步骤为手动配置原生依赖项的指导</summary>
 
-### Using [CocoaPods](https://cocoapods.org/)
+首先需要使用 DevEco Studio 打开项目里的 HarmonyOS 工程 `harmony`。
 
-Add the following to your `Podfile` and run `pod install`:
+> **说明**：本模块为 TurboModule，需同时在 C++ 侧和 ETS 侧注册 Package，**无需**注册 ArkUI 自定义组件。
 
-```ruby
- pod 'react-native-in-app-review', :path => '../node_modules/react-native-in-app-review'
-```
+### 1. Overrides RN SDK
 
-</details>
+为了让工程依赖同一个版本的 RN SDK，需要在工程根目录的 `oh-package.json5` 添加 `overrides` 字段，指向工程需要使用的 RN SDK 版本。
 
-### Android installation
+关于该字段的作用请阅读[官方说明](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-oh-package-json5-V5#zh-cn_topic_0000001792256137_overrides)
 
-<details>
-  <summary>Android details</summary>
-
-Run `react-native link react-native-in-app-review` to link the react-native-in-app-review library.
-
-#### **android/settings.gradle**
-
-```gradle
-include ':react-native-in-app-review'
-project(':react-native-in-app-review').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-in-app-review/android')
-```
-
-#### **android/app/build.gradle**
-
-From version >= 5.0.0, you have to apply these changes:
-
-```diff
-dependencies {
-   ...
-+    implementation project(':react-native-in-app-review')
+```json
+{
+  "overrides": {
+    "@rnoh/react-native-openharmony": "~0.72.38"
+    // "@rnoh/react-native-openharmony": "./react_native_openharmony.har"
+    // "@rnoh/react-native-openharmony": "./react_native_openharmony"
+  }
 }
 ```
 
-#### **android/gradle.properties**
+### 2. 引入原生端代码
 
-Migrating to AndroidX (needs version >= 5.0.0):
+目前有两种方法：
 
-```gradle.properties
-android.useAndroidX=true
-android.enableJetifier=true
+- 通过 har 包引入（推荐）
+- 直接链接源码
+
+**方法一：通过 har 包引入（推荐）**
+
+> [!TIP] har 包位于三方库安装路径的 `harmony/in_app_review.har`。
+
+打开 `entry/oh-package.json5`，添加以下依赖：
+
+```json
+"dependencies": {
+  "@react-native-ohos/react-native-in-app-review": "file:../../node_modules/@react-native-ohos/react-native-in-app-review/harmony/in_app_review.har"
+}
 ```
 
-#### **Then, in android/app/src/main/java/your/package/MainApplication.java:**
+点击右上角的 `sync` 按钮，或者在命令行终端执行：
 
-On top, where imports are:
-
-```java
-import com.ibits.react_native_in_app_review.AppReviewPackage;
+```bash
+cd entry
+ohpm install
 ```
 
-```java
-@Override
-protected List<ReactPackage> getPackages() {
-    return Arrays.asList(
-            new MainReactPackage(),
-            new AppReviewPackage()
-    );
+**方法二：直接链接源码**
+
+> [!TIP] 如需使用直接链接源码，请参考[直接链接源码说明](https://gitcode.com/CPF-RN/usage-docs/blob/master/zh-cn/link-source-code.md)
+
+### 3. 配置 CMakeLists 和引入 InAppReviewPackage
+
+打开 `entry/src/main/cpp/CMakeLists.txt`，添加：
+
+```cmake
+set(OH_MODULES "${CMAKE_CURRENT_SOURCE_DIR}/../../../oh_modules")
+
+add_subdirectory("${OH_MODULES}/@react-native-ohos/react-native-in-app-review/src/main/cpp" ./in_app_review)
+
+target_link_libraries(rnoh_app PUBLIC in_app_review)
+```
+
+打开 `entry/src/main/cpp/PackageProvider.cpp`，添加：
+
+```cpp
+#include "InAppReviewPackage.h"
+
+std::vector<std::shared_ptr<Package>> PackageProvider::getPackages(Package::Context ctx) {
+    return {
+        std::make_shared<InAppReviewPackage>(ctx),
+    };
+}
+```
+
+### 4. 在 ArkTS 侧引入 InAppReviewPackage
+
+打开 `entry/src/main/ets/RNOHPackagesFactory.ets`（或 `RNPackagesFactory.ets`），添加：
+
+```typescript
+import InAppReviewPackage from '@react-native-ohos/react-native-in-app-review';
+
+export function createRNOHPackages(ctx: RNPackageContext): RNOHPackage[] {
+  return [
+    new InAppReviewPackage(ctx),
+  ];
 }
 ```
 
 </details>
 
-# Usage
+### 运行
 
-```javascript
+点击右上角的 `sync` 按钮，或者在命令行终端执行：
+
+```bash
+cd entry
+ohpm install
+```
+
+然后编译、运行即可。
+
+## 约束与限制
+
+### 兼容性
+
+本文档内容基于以下版本验证通过：
+
+1. RNOH: 0.72.96; SDK: HarmonyOS 6.0.0 Release SDK; IDE: DevEco Studio 6.0.0.858; ROM: 6.0.0.112;
+2. RNOH: 0.72.33; SDK: HarmonyOS NEXT B1; IDE: DevEco Studio: 5.0.3.900; ROM: Next.0.0.71;
+3. RNOH: 0.77.18; SDK: HarmonyOS 6.0.0 Release SDK; IDE: DevEco Studio 6.0.0.858; ROM: 6.0.0.112;
+4. RNOH: 0.82.1; SDK: HarmonyOS 6.0.1 Release SDK; IDE: DevEco Studio 6.0.1 Release; ROM:6.0.0.120 SP7;
+
+### 权限要求
+
+- 无需任何权限，无需修改 `module.json5`
+
+### 编译运行 API 要求
+
+> [!TIP] 当前三方库所有版本均已实现版本隔离，支持在 `API12+` 工程编译，及 `API12+` ROM 运行。
+
+> [!TIP] 以下功能依赖特定版本的 API，使用 `低于指定 API 版本的工程编译` 或 `低于指定 API 版本的 ROM 运行` 均可能导致部分功能受限。
+
+1. 应用内评论弹窗依赖 AppGalleryKit `commentManager.showCommentDialog`，起始版本 **HarmonyOS 6.0.0(20)**。低于 API 20 时 `isAvailable()` 返回 `false`，调用走 reject code `'21'`。
+2. 内部降级路径 `openAppGalleryDetailPage()` 依赖 `productViewManager.loadProduct`，起始版本 **4.1.0(11)**；`onAppear` 回调起始 **5.0.2(14)**。
+
+## 使用示例
+
+下面的代码展示了这个库的基本使用场景：
+
+> [!WARNING] 使用时 import 的库名不变。
+
+```tsx
 import InAppReview from 'react-native-in-app-review';
+
+if (InAppReview.isAvailable()) {
+  InAppReview.RequestInAppReview()
+    .then(result => {
+      // 弹窗流程完成，HarmonyOS 端 resolve(true)（boolean）
+      console.log('流程完成', result);
+    })
+    .catch((error: {code: string; message: string}) => {
+      // 设备不支持时 code='21'；其余为应用评论服务错误码 1021500001~1021500009
+      console.log(error.code, error.message);
+    });
+}
 ```
 
-```javascript
-// This package is only available on android version >= 21 and iOS >= 10.3
+## 使用说明
 
-// Give you result if version of device supported to rate app or not!
-InAppReview.isAvailable();
+**能力查询（同步）**
 
-// trigger UI InAppreview
+```tsx
+const available = InAppReview.isAvailable();
+// HarmonyOS：canIUse('SystemCapability.AppGalleryService.Distribution.Comment')
+// Android：Platform.Version >= 21
+// iOS：检测 StoreKit 类是否存在
+```
+
+**应用内评分**
+
+```tsx
 InAppReview.RequestInAppReview()
-  .then((hasFlowFinishedSuccessfully) => {
-    // when return true in android it means user finished or close review flow
-    console.log('InAppReview in android', hasFlowFinishedSuccessfully);
-
-    // when return true in ios it means review flow lanuched to user.
-    console.log(
-      'InAppReview in ios has launched successfully',
-      hasFlowFinishedSuccessfully,
-    );
-
-    // 1- you have option to do something ex: (navigate Home page) (in android).
-    // 2- you have option to do something,
-    // ex: (save date today to lanuch InAppReview after 15 days) (in android and ios).
-
-    // 3- another option:
-    if (hasFlowFinishedSuccessfully) {
-      // do something for ios
-      // do something for android
-    }
-
-    // for android:
-    // The flow has finished. The API does not indicate whether the user
-    // reviewed or not, or even whether the review dialog was shown. Thus, no
-    // matter the result, we continue our app flow.
-
-    // for ios
-    // the flow lanuched successfully, The API does not indicate whether the user
-    // reviewed or not, or he/she closed flow yet as android, Thus, no
-    // matter the result, we continue our app flow.
-  })
-  .catch((error) => {
-    //we continue our app flow.
-    // we have some error could happen while lanuching InAppReview,
-    // Check table for errors and code number that can return in catch.
-    console.log(error);
-  });
+  .then(result => console.log(result)) // HarmonyOS: true
+  .catch(error => console.log(error.code, error.message));
 ```
 
-# Huawei In-App Comment (App Gallery Review)
+**应用市场应用内评论**
 
-Before You Start
-
-- First of all, you must integrate HMS into the project. I am not going to explain these steps You can check [this article](https://medium.com/huawei-developers/android-integrating-your-apps-with-huawei-hms-core-1f1e2a090e98).
-- You have released your app officially on AppGallery.
-- Users have installed AppGallery 11.3.2.302 or later and signed in using HUAWEI IDs.
-
-```javascript
-// trigger UI in app comment to request review for App Gallery;
+```tsx
+// HarmonyOS 上与 RequestInAppReview 同一实现
 InAppReview.requestInAppCommentAppGallery()
-  .then((resultCode) => {
-    // when return resultCode (102,103) in android it means Rating submitted or Comment submitted
-    console.log('in app comment app gallery', resultCode);
-  })
-  .catch((error) => {
-    //we continue our app flow.
-    // we have some error could happen while lanuching in app comment,
-    // Check table for errors appears in app gallery and code number that can return in catch.
-    console.log(error);
-  });
+  .then(result => console.log(result))
+  .catch(error => console.log(error.code, error.message));
 ```
 
-# Error could happen and code number (Google play, App Store) Table
+**降级路径（内部 API，不经 InAppReview 类暴露）**
 
-| Error Name                    | Code Number | Description                                                                                                                                                | iOS | Android |
-| ----------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --- | ------- |
-| ERROR_DEVICE_VERSION          | 21          | This Device not supported to launch InAppReview                                                                                                            | ✅  | ✅      |
-| GOOGLE_SERVICES_NOT_AVAILABLE | 22          | This Device doesn't support google play services                                                                                                           | ❌  | ✅      |
-| [DYNAMIC ERROR NAME]          | 23          | Unexpected error occur may return different error from different user and device check code number to get discovered errors messages that could be happen. | ❌  | ✅      |
-| ACTIVITY_DOESN'T_EXIST        | 24          | Unexpected error occur while getting activity                                                                                                              | ❌  | ✅      |
-| SCENE_DOESN'T_EXIST           | 25          | Unexpected error occur while getting scene                                                                                                                 | ✅  | ❌      |
+```tsx
+import {TurboModuleRegistry} from 'react-native';
 
-# Error could happen and code number (App Gallery) Table
+const mod = TurboModuleRegistry.get('InAppReviewModule') as {
+  openAppGalleryDetailPage(): Promise<boolean>;
+} | null;
 
-| Error Name                                                                                                           | Code Number | Description                                                                                                          | Android |
-| -------------------------------------------------------------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------- | ------- |
-| ACTIVITY_DOESN'T_EXIST                                                                                               | 24          | Unexpected error occur while getting activity                                                                        | ✅      |
-| Ensure that your app has been correctly released on AppGallery                                                       | 101         | Ensure that your app has been correctly released on AppGallery                                                       | ✅      |
-| check the HUAWEI ID sign-in status                                                                                   | 104         | check the HUAWEI ID sign-in status                                                                                   | ✅      |
-| The user does not meet the conditions for displaying the comment pop-up                                              | 105         | The user does not meet the conditions for displaying the comment pop-up                                              | ✅      |
-| The commenting function is disabled                                                                                  | 106         | The commenting function is disabled                                                                                  | ✅      |
-| The in-app commenting service is not supported. (Apps released in the Chinese mainland do not support this service.) | 107         | The in-app commenting service is not supported. (Apps released in the Chinese mainland do not support this service.) | ✅      |
-| The user canceled the comment.                                                                                       | 108         | The user canceled the comment.                                                                                       | ✅      |
-| in app comment Unknown error                                                                                         | 0           | Unknown Error                                                                                                        | ✅      |
-
-# + Android guidlelines and notes:
-
-# Read very well for (Google Play):
-
-After publishing you app to test your integration in production or either internal test tracks or internal app sharing and prompt in app review flow you may face issue that not showing review popup after you followed all guidelines very well,
-**Note that this issue was classified as google play api issue.**
-
-We found most probably solutions that may be successful to launch review popup:
-
-- Make sure you have installed latest google play store update.
-- Note that the popup will not work if you are signed in to the Play Store with a GSuite ID. Once you switch to an @gmail email address, this will start working.
-- Make sure there is only one Google account in the test device.
-- Please note, that user must be a tester if you are testing on any testing track.
-- CLEAR CACHE and CLEAR STORAGE from Google Play Store app.
-- Remove existing app rating in Google Play Store.
-- after doing all of pervious solutions, remove your app and reinstall it.
-
-# When to request an in-app review
-
-Follow these guidelines to help you decide when to request in-app reviews from users:
-
-- Trigger the in-app review flow after a user has experienced enough of your app or game to provide useful feedback.
-- Do not prompt the user excessively for a review. This approach helps minimize user frustration and limit API usage (see the section on quotas).
-- Your app should not ask the user any questions before or while presenting the rating button or card, including questions about their opinion (such as “Do you like the app?”) or predictive questions (such as “Would you rate this app 5 stars”).
-
-# Quotas
-
-To provide a great user experience, Google Play enforces a quota on how often a user can be shown the review dialog. Because of this, calling a launchReviewFlow method might not always display a dialog. For example, you should not have a call-to-action option (such as a button) to trigger a review as a user might have already hit their quota and the flow won’t be shown, presenting a broken experience to the user.
-
-# Device requirements
-
-In-app reviews only work on the following devices:
-
-- Android devices (phones and tablets) running Android 5.0 (API level 21) or higher that have the Google Play Store installed.
-- Chrome OS devices that have the Google Play Store installed.
-
-# Please Note, To test your integration using the Google Play Store
-
-- In-app reviews require your app to be published in Play Store. However, you can test your integration without publishing your app to production using either internal test tracks or internal app sharing.
-
-# Please Note, To test your integration using the App Gallery Store
-
-- If your app has been released on AppGallery, you need to release an open testing version for it and then perform the testing.
-- If your app has not been released on AppGallery, you need to release an open testing version for it and then perform the testing. Otherwise, app authentication will fail.
-
-# Troubleshooting (Google Play):
-
-As you integrate and test in-app reviews, you might run into some issues. The following table outlines the most common issues that can prevent the in-app review dialog from displaying in your app:
-
-| Issue                                                                               | Solution                                                                                                                                                             |
-| ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Your app is not published yet in the Play Store.                                    | Your app doesn't have to be published to test, but your app's applicationID must be available at least in the internal testing track.                                |
-| The user account can't review the app.                                              | Your app must be in the user's Google Play library. To add your app to the user's library, download your app from the Play Store using that user's account.          |
-| The primary account is not selected in the Play Store.                              | When multiple accounts are available in the device, ensure that the primary account is the one selected in the Play Store.                                           |
-| The user account is protected (for example, with enterprise accounts).              | Use a Gmail account instead.                                                                                                                                         |
-| The user has already reviewed the app.                                              | Delete the review directly from Play Store.                                                                                                                          |
-| The quota has been reached.                                                         | Use an internal test track or internal app sharing.                                                                                                                  |
-| There is an issue with the Google Play Store or Google Play Services on the device. | This commonly occurs when the Play Store was sideloaded onto the device. Use a different device that has a valid version of the Play Store and Google Play Services. |
-
----
-
-# Troubleshooting (App Gallery):
-
-Device Restrictions
-
-- Users must have installed AppGallery 11.3.2.302 or later.
-- Users must have installed HMS Core (APK) on their devices.
-
-| Application Restrictions | Restrictions                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Applicable scope         | The in-app comments function is available only for apps released on AppGallery outside the Chinese mainland.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| Audiences                | - The in-app comment pop-up is displayed only for users who have signed in to AppGallery using HUAWEI IDs. <br/> - The in-app comment pop-up is displayed only for users who have opened your app for 10 or more times within the last three months since you have called the in-app comments API <br/> - If the user has submitted a rating and a comment for the current app version, the in-app comment pop-up will not be displayed for the user in this app version. The in-app comment pop-up will be displayed again only after the user updates the app to a later version, has not submitted a rating and a comment for more than a calendar year, and the preceding conditions for displaying the pop-up are met. <br/> - If a user chooses not to receive any app comment notifications under Me > Settings on AppGallery, the pop-up will not be displayed for the user. |
-
----
-
-# + iOS Notes:
-
-# System Rating and Review Prompts
-
-The system offers a consistent, nonintrusive way for apps to request ratings and reviews. To use this feature, you simply identify places in your app's user experience where it makes sense to ask for feedback. If the user hasn't already given feedback, the system displays an in-app prompt that asks for a rating and an optional written review. The user can supply feedback or dismiss the prompt with a single tap. (In Settings, the user can also opt out of receiving these rating prompts for all apps they have installed.) The system automatically limits the display of the prompt to three occurrences per app within a 365-day period.
-
-# When to request an in-app-review
-
-- Ask for a rating only after the user has demonstrated engagement with your app. For example, prompt the user upon the completion of a game level or productivity task. Never ask for a rating on first launch or during onboarding. Allow ample time to form an opinion.
-
-- Don’t interrupt the user, especially when they’re performing a time-sensitive or stressful task. Look for logical pauses or stopping points, where a rating request makes the most sense.
-
-- Don’t be a pest. Repeated rating prompts can be irritating, and may even negatively influence the user’s opinion of your app. Allow at least a week or two between rating requests and only prompt again after the user has demonstrated additional engagement with your app.
-
-- Don't use buttons or other controls to request feedback. Since the system limits how often rating prompts occur, attempting to request feedback in response to a control may result in no rating prompt being displayed.
-
-# Please Note, To test your integration using the App Store
-
-- When you call this method while your app is still in development mode, a rating/review request view is always displayed so that you can test the user interface and experience. However, this method has no effect when you call it in an app that you distribute using TestFlight.
-
-## How to test your code
-
-Because it's a native module, you might need to mock this package to run your tests.
-Here is an example for Jest, adapt it to your needs :
-
-```js
-// __mocks__/react-native-in-app-review.js
-
-module.exports = {
-  RequestInAppReview: jest.fn(),
-  isAvailable: jest.fn(),
-  // add more methods as needed
-};
+mod?.openAppGalleryDetailPage()
+  .then(ok => console.log('详情页已打开', ok))
+  .catch(err => console.log(err.code, err.message));
 ```
 
-Or, if you have a Jest setup file:
+**HarmonyOS 错误码说明**
 
-```js
-// jest.setup.js
+| Code | 含义 |
+|------|------|
+| `21` | 设备/API 不支持应用内评论弹窗 |
+| `24` | `UIAbilityContext` 不可用 |
+| `1021500006` | 未登录华为账号 |
+| `1021500007` | 当前版本已评论 |
+| `1021500008` | 评论次数达上限（一年内最多 3 次） |
+| `1021500009` | 距上次评论不足一年 |
 
-jest.mock('react-native-in-app-review', () => ({
-  RequestInAppReview: jest.fn(),
-  isAvailable: jest.fn(),
-}));
+## 接口说明
+
+> [!TIP] "Platform" 列表示该 API 在原三方库上支持的平台。
+
+> [!TIP] "OpenHarmony 平台支持" 列为 yes 表示 OpenHarmony 平台支持该 API；no 表示不支持；partially 表示部分支持或语义映射。使用方法跨平台一致，效果对标 iOS 或 Android 的效果。
+
+本库为原生桥接库，**无 UI 组件、无 Props**，对外仅暴露 `InAppReview` 类的静态方法。
+
+### API
+
+| 名称 | 类型 | 参数类型 | 返回值 | 必填 | 平台 | OpenHarmony 平台支持 | 描述 |
+|------|------|---------|--------|------|------|---------------------|------|
+| isAvailable | function | / | boolean | No | Android, iOS | yes | 同步查询当前设备是否具备应用内评论能力。HarmonyOS 通过 `canIUse` 检测系统能力（API 20+） |
+| RequestInAppReview | function | / | Promise\<boolean\> | No | Android, iOS | partially | 拉起应用内评分流程。HarmonyOS 映射为 AppGallery `showCommentDialog`；成功 resolve `true`，不代表用户已评分 |
+| requestInAppCommentAppGallery | function | / | Promise\<boolean\> | No | Android (HMS) | yes | 华为应用市场应用内评论。HarmonyOS 上与 `RequestInAppReview` 合流为同一实现；不复现上游 Android 102/103 结果码 |
+
+### 内部 API（TurboModule，未进入 JS 公开面）
+
+| 名称 | 类型 | 参数类型 | 返回值 | 必填 | 平台 | OpenHarmony 平台支持 | 描述 |
+|------|------|---------|--------|------|------|---------------------|------|
+| openAppGalleryDetailPage | function | / | Promise\<boolean\> | No | — | yes | 降级路径：`productViewManager.loadProduct` 拉起应用市场详情页手动评分（API 11+） |
+
+### 平台差异
+
+| 项 | 上游行为 | HarmonyOS 行为 |
+|----|---------|---------------|
+| `RequestInAppReview` 成功值 | Android: boolean；iOS: 字符串 `'true'` | 统一 `boolean true` |
+| `requestInAppCommentAppGallery` 成功值 | Android HMS: `102`/`103` | 统一 `boolean true` |
+| 错误码 | Google Play / HMS Intent 101~108 | 鸿蒙原生 `102150000x`；`21`/`24` 对齐上游编号 |
+| Google Play / StoreKit | 各自原生 API | 不支持（平台无关） |
+
+## 快速验证（运行 Example）
+
+### 前置条件
+
+| 依赖 | 版本要求 |
+|------|----------|
+| Node.js | >= 20 |
+| DevEco Studio | 5.0+ / 6.0+ |
+| HarmonyOS SDK | API 12+ |
+
+### 运行步骤
+
+**1. 克隆仓库并安装依赖**
+
+```bash
+git clone https://github.com/react-native-oh-library/react-native-in-app-review.git
+cd react-native-in-app-review
+npm install
 ```
 
-You might have to use the following value in your mock to resolve `TypeError: Cannot read property 'then' of undefined`:
+**2. 进入 example 目录，安装依赖**
 
-```js
-RequestInAppReview: jest.fn().mockImplementation(() => {
-  return Promise.resolve();
-}),
+```bash
+cd example
+npm install
 ```
+
+**3. 生成 JS Bundle**
+
+```bash
+npm run dev
+```
+
+产物：`harmony/entry/src/main/resources/rawfile/bundle.harmony.js`
+
+**4. 用 DevEco Studio 打开鸿蒙工程**
+
+- 打开 `example/harmony` 目录
+- 等待 Sync 完成
+- 编译并运行 HAP
+
+> **注意**：Example 已预置 Autolink 与 Package 注册；应用内评论弹窗需 **真机** + **API 20+** + 华为账号，模拟器仅能验证 `isAvailable()` 与错误分支。
+
+## 遗留问题
+
+- 应用内评论弹窗（`commentManager`）起始版本 6.0.0(20)，低于该版本需经内部降级 API `openAppGalleryDetailPage()` 拉起详情页手动评分
+- 评论弹窗不支持模拟器；真机验证依赖 AGC 注册应用与华为账号登录，错误分支（`code` + `message`）为常态验证面
+- 官方 Deep Link 写评论页（`store://…&action=write-review`）未封装，当前仅有 `loadProduct` 详情页降级
+
+## 其他
+
+无
+
+## 目录结构
+
+````
+react-native-in-app-review          # 项目根目录
+├── harmony                         # 鸿蒙适配代码
+│   ├── in_app_review.har           # har 包
+│   └── in_app_review               # 鸿蒙适配核心代码
+│       ├── index.ets               # 鸿蒙适配代码入口
+│       └── src/main/
+│           ├── ets/
+│           │   ├── InAppReviewModule.ets
+│           │   └── InAppReviewTurboModulesFactory.ets
+│           └── cpp/                # C++ TurboModule 桥接
+├── src                             # RN 代码
+│   ├── index.ts                    # JS 入口（对齐上游 index.js + harmony 分支）
+│   └── specs/
+│       └── InAppReviewModule.ts    # Harmony TurboModule Spec
+├── example/                        # 鸿蒙 Example
+│   ├── App.tsx
+│   └── harmony/                    # 鸿蒙工程
+├── index.d.ts                      # 上游公开类型声明
+├── README.md                       # 中文文档
+└── README_en.md                    # 英文文档
+````
+
+## 贡献代码
+
+使用过程中发现任何问题都可以提交 [Issue](https://github.com/react-native-oh-library/react-native-in-app-review/issues)，也非常欢迎提交 [PR](https://github.com/react-native-oh-library/react-native-in-app-review/pulls)。
+
+## 开源协议
+
+本项目基于 [MIT License](https://github.com/MinaSamir11/react-native-in-app-review/blob/master/LICENSE)。

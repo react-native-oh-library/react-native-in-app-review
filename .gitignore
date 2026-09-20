@@ -1,9 +1,30 @@
+# OSX
 .DS_Store
-.idea
-.gradle
-local.properties
-.project
-gradle
+
+# node.js
 node_modules/
-test-results/
-coverage
+npm-debug.log
+yarn-error.log
+
+# Build output
+/dist
+
+# Test coverage output
+/coverage
+
+# npm pack output
+*.tgz
+
+# IDE
+.idea/
+.vscode/
+
+# HarmonyOS
+harmony/library/.cxx/
+harmony/library/build/
+harmony/library/.hvigor/
+
+# rn.py build hap fingerprints / local build metadata
+.rn-build/
+
+package-lock.json

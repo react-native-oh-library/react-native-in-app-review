@@ -1,0 +1,1 @@
+export { InAppReviewPackage as default } from './src/main/ets/InAppReviewTurboModulesFactory';

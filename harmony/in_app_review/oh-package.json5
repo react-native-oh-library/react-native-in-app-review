@@ -1,0 +1,12 @@
+{
+  "license": "Apache-2.0",
+  "devDependencies": {},
+  "author": "",
+  "name": "@react-native-ohos/react-native-in-app-review",
+  "description": "Please describe the basic information.",
+  "main": "index.ets",
+  "version": "4.4.3-beta.1",
+  "dependencies": {
+    "@rnoh/react-native-openharmony": "file:../react_native_openharmony_release.har"
+  }
+}
