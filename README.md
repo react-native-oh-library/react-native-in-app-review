@@ -185,7 +185,6 @@ ohpm install
 > [!TIP] 以下功能依赖特定版本的 API，使用 `低于指定 API 版本的工程编译` 或 `低于指定 API 版本的 ROM 运行` 均可能导致部分功能受限。
 
 1. 应用内评论弹窗依赖 AppGalleryKit `commentManager.showCommentDialog`，起始版本 **HarmonyOS 6.0.0(20)**。低于 API 20 时 `isAvailable()` 返回 `false`，调用走 reject code `'21'`。
-2. 内部降级路径 `openAppGalleryDetailPage()` 依赖 `productViewManager.loadProduct`，起始版本 **4.1.0(11)**；`onAppear` 回调起始 **5.0.2(14)**。
 
 ## 使用示例
 
@@ -237,20 +236,6 @@ InAppReview.requestInAppCommentAppGallery()
   .catch(error => console.log(error.code, error.message));
 ```
 
-**降级路径（内部 API，不经 InAppReview 类暴露）**
-
-```tsx
-import {TurboModuleRegistry} from 'react-native';
-
-const mod = TurboModuleRegistry.get('InAppReviewModule') as {
-  openAppGalleryDetailPage(): Promise<boolean>;
-} | null;
-
-mod?.openAppGalleryDetailPage()
-  .then(ok => console.log('详情页已打开', ok))
-  .catch(err => console.log(err.code, err.message));
-```
-
 **HarmonyOS 错误码说明**
 
 | Code | 含义 |
@@ -277,12 +262,6 @@ mod?.openAppGalleryDetailPage()
 | isAvailable | function | / | boolean | No | Android, iOS | yes | 同步查询当前设备是否具备应用内评论能力。HarmonyOS 通过 `canIUse` 检测系统能力（API 20+） |
 | RequestInAppReview | function | / | Promise\<boolean\> | No | Android, iOS | partially | 拉起应用内评分流程。HarmonyOS 映射为 AppGallery `showCommentDialog`；成功 resolve `true`，不代表用户已评分 |
 | requestInAppCommentAppGallery | function | / | Promise\<boolean\> | No | Android (HMS) | yes | 华为应用市场应用内评论。HarmonyOS 上与 `RequestInAppReview` 合流为同一实现；不复现上游 Android 102/103 结果码 |
-
-### 内部 API（TurboModule，未进入 JS 公开面）
-
-| 名称 | 类型 | 参数类型 | 返回值 | 必填 | 平台 | OpenHarmony 平台支持 | 描述 |
-|------|------|---------|--------|------|------|---------------------|------|
-| openAppGalleryDetailPage | function | / | Promise\<boolean\> | No | — | yes | 降级路径：`productViewManager.loadProduct` 拉起应用市场详情页手动评分（API 11+） |
 
 ### 平台差异
 
@@ -338,7 +317,6 @@ npm run dev
 
 ## 遗留问题
 
-- 应用内评论弹窗（`commentManager`）起始版本 6.0.0(20)，低于该版本需经内部降级 API `openAppGalleryDetailPage()` 拉起详情页手动评分
 - 评论弹窗不支持模拟器；真机验证依赖 AGC 注册应用与华为账号登录，错误分支（`code` + `message`）为常态验证面
 - 官方 Deep Link 写评论页（`store://…&action=write-review`）未封装，当前仅有 `loadProduct` 详情页降级
 

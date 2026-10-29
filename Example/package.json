@@ -3,11 +3,15 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "lint": "eslint .",
-    "start": "react-native start",
-    "test": "jest",
-    "dev": "react-native bundle-harmony --dev false",
-    "tsc": "tsc --noEmit"
+    "fast-install-project": "cd ../ && npm i --legacy-peer-deps && npm pack && cd ./example && npm i --legacy-peer-deps",
+    "fast:pkg": "npm run fast-install-project && npm run dev",
+    "start": "hdc rport tcp:8081 tcp:8081 && react-native start",
+    "reStart": "npm run install:pkg && npm run codegen && hdc rport tcp:8081 tcp:8081 && react-native start",
+    "pack:pkg": "cd ../ && npm pack && cd ./example",
+    "install:pkg": "npm uninstall @react-native-ohos/react-native-headless && npm run pack:pkg && npm i @react-native-ohos/react-native-headless@file:../react-native-ohos-react-native-headless-0.0.5-beta.1.tgz",
+    "dev": "npm run codegen && react-native bundle-harmony --dev --minify=false",
+    "postinstall": "node ./scripts/create-build-profile && node ./scripts/sync-hvigor-plugin",
+    "codegen": "react-native codegen-harmony --rnoh-module-path ./harmony/entry/oh_modules/@rnoh/react-native-openharmony"
   },
   "dependencies": {
     "@react-native-oh/react-native-harmony": "0.84.2",

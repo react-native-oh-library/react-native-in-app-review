@@ -4,7 +4,7 @@ project(rnapp)
 # entry/src/main/cpp -> entry/oh_modules
 set(RNOH_APP_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 set(OH_MODULES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../oh_modules")
-set(RNOH_CPP_DIR "${OH_MODULES_DIR}/@rnoh/react-native-openharmony/include")
+set(RNOH_CPP_DIR "${OH_MODULES_DIR}/@rnoh/react-native-openharmony/src/main/cpp")
 set(RNOH_GENERATED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/generated")
 set(LOG_VERBOSITY_LEVEL 1)
 set(CMAKE_ASM_FLAGS "-Wno-error=unused-command-line-argument -Qunused-arguments")
@@ -13,9 +13,7 @@ set(WITH_HITRACE_SYSTRACE ON)
 set(WITH_HITRACE_REACT_MARKER ON)
 set(CMAKE_CXX_STANDARD 20)
 
-# RNOH 0.82+/0.84+ release HAR：预编译 so + include/react-native-harmony.cmake
-# （旧版 src/main/include + 源码编译路径已不存在）
-include("${RNOH_CPP_DIR}/react-native-harmony.cmake")
+add_subdirectory("${RNOH_CPP_DIR}" ./rn)
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/autolinking.cmake")
 

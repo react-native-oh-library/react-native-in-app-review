@@ -185,7 +185,6 @@ This document is verified based on the following versions:
 > [!TIP] The following features depend on specific API versions. Compiling with a lower API version or running on a lower API ROM may limit functionality.
 
 1. The in-app comment dialog depends on AppGalleryKit `commentManager.showCommentDialog`, starting from **HarmonyOS 6.0.0(20)**. Below API 20, `isAvailable()` returns `false` and calls reject with code `'21'`.
-2. The internal fallback `openAppGalleryDetailPage()` depends on `productViewManager.loadProduct`, starting from **4.1.0(11)**; the `onAppear` callback starts from **5.0.2(14)**.
 
 ## Example
 
@@ -237,20 +236,6 @@ InAppReview.requestInAppCommentAppGallery()
   .catch(error => console.log(error.code, error.message));
 ```
 
-**Fallback path (internal API, not exposed on InAppReview class)**
-
-```tsx
-import {TurboModuleRegistry} from 'react-native';
-
-const mod = TurboModuleRegistry.get('InAppReviewModule') as {
-  openAppGalleryDetailPage(): Promise<boolean>;
-} | null;
-
-mod?.openAppGalleryDetailPage()
-  .then(ok => console.log('Detail page opened', ok))
-  .catch(err => console.log(err.code, err.message));
-```
-
 **HarmonyOS error codes**
 
 | Code | Meaning |
@@ -277,12 +262,6 @@ This library is a native bridge with **no UI components or Props**. Only static 
 | isAvailable | function | / | boolean | No | Android, iOS | yes | Synchronously checks in-app comment capability. HarmonyOS uses `canIUse` (API 20+) |
 | RequestInAppReview | function | / | Promise\<boolean\> | No | Android, iOS | partially | Launches in-app review flow. HarmonyOS maps to AppGallery `showCommentDialog`; resolves `true` on completion (does not mean user rated) |
 | requestInAppCommentAppGallery | function | / | Promise\<boolean\> | No | Android (HMS) | yes | App Gallery in-app comment. Same implementation as `RequestInAppReview` on HarmonyOS; does not reproduce upstream 102/103 result codes |
-
-### Internal API (TurboModule, not in public JS surface)
-
-| Name | Type | Parameter Type | Return Value | Required | Platform | OpenHarmony Platform Support | Description |
-|------|------|---------------|--------------|----------|----------|------------------------------|-------------|
-| openAppGalleryDetailPage | function | / | Promise\<boolean\> | No | — | yes | Fallback: `productViewManager.loadProduct` opens App Gallery detail page for manual rating (API 11+) |
 
 ### Platform Differences
 
@@ -338,7 +317,6 @@ Output: `harmony/entry/src/main/resources/rawfile/bundle.harmony.js`
 
 ## Known Issues
 
-- In-app comment dialog (`commentManager`) starts from 6.0.0(20). Below that version, use internal fallback `openAppGalleryDetailPage()` to open the detail page for manual rating
 - Comment dialog is not supported on emulators; real-device verification depends on AGC app registration and Huawei account sign-in. Error branches (`code` + `message`) are the primary validation surface
 - Official Deep Link write-review path (`store://…&action=write-review`) is not wrapped; only `loadProduct` detail-page fallback is available
 
