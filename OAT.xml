@@ -29,9 +29,9 @@
 				<filteritem type="filepath" name="jest/**/*" desc="测试代码，不修改版权头"/>
 				<filteritem type="filepath" name="coverage/**/*" desc="测试覆盖率报告，不修改版权头"/>
 				<filteritem type="filepath" name="example/**/*" desc="示例工程，不修改版权头"/>
-				<filteritem type="filepath" name="harmony/headless/src/main/cpp/generated/**/*" desc="codegen 自动生成，不修改版权头"/>
-				<filteritem type="filepath" name="harmony/headless/src/main/ets/generated/**/*" desc="codegen 自动生成，不修改版权头"/>
-				<filteritem type="filepath" name="harmony/headless/src/main/cpp/HeadlessPackage.h" desc="Package 壳文件，不修改版权头"/>
+				<filteritem type="filepath" name="harmony/entry/src/main/cpp/generated/**/*" desc="codegen 自动生成，不修改版权头"/>
+				<filteritem type="filepath" name="harmony/entry/src/main/ets/generated/**/*" desc="codegen 自动生成，不修改版权头"/>
+				<filteritem type="filepath" name="harmony/entry/src/main/cpp/EntryPackage.h" desc="Package 壳文件，不修改版权头"/>
 				<filteritem type="filepath" name="README.md" desc="文档文件，不修改版权头"/>
 				<filteritem type="filepath" name="README_en.md" desc="文档文件，不修改版权头"/>
 				<filteritem type="filepath" name="CHANGELOG.md" desc="文档文件，不修改版权头"/>
@@ -62,10 +62,10 @@
 				<filteritem type="filepath" name="jest/**/*" desc="测试代码，不修改许可证头"/>
 				<filteritem type="filepath" name="coverage/**/*" desc="测试覆盖率报告，不修改许可证头"/>
 				<filteritem type="filepath" name="example/**/*" desc="示例工程，不修改许可证头"/>
-				<filteritem type="filepath" name="harmony/headless/src/main/cpp/generated/**/*" desc="codegen 自动生成，不修改许可证头"/>
-				<filteritem type="filepath" name="harmony/headless/src/main/ets/generated/**/*" desc="codegen 自动生成，不修改许可证头"/>
-				<filteritem type="filepath" name="harmony/headless/src/main/cpp/HeadlessPackage.h" desc="Package 壳文件，不修改许可证头"/>
-				<filteritem type="filepath" name="README.md" desc="文档文件，不修改许可证头"/>
+				<filteritem type="filepath" name="harmony/entry/src/main/cpp/generated/**/*" desc="codegen 自动生成，不修改许可证头"/>
+				<filteritem type="filepath" name="harmony/entry/src/main/ets/generated/**/*" desc="codegen 自动生成，不修改许可证头"/>
+				<filteritem type="filepath" name="harmony/entry/src/main/cpp/EntryPackage.h" desc="Package 壳文件，不修改许可证头"/>
+				<filteritem type="filepath" name="README.md" desc="文档文件，不修改许可证头"/>	
 				<filteritem type="filepath" name="README_en.md" desc="文档文件，不修改许可证头"/>
 				<filteritem type="filepath" name="CHANGELOG.md" desc="文档文件，不修改许可证头"/>
 			</filefilter>

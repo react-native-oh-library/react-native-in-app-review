@@ -8,7 +8,7 @@
     "start": "hdc rport tcp:8081 tcp:8081 && react-native start",
     "reStart": "npm run install:pkg && npm run codegen && hdc rport tcp:8081 tcp:8081 && react-native start",
     "pack:pkg": "cd ../ && npm pack && cd ./example",
-    "install:pkg": "npm uninstall @react-native-ohos/react-native-headless && npm run pack:pkg && npm i @react-native-ohos/react-native-headless@file:../react-native-ohos-react-native-headless-0.0.5-beta.1.tgz",
+    "install:pkg": "npm uninstall @react-native-ohos/react-native-in-app-review && npm run pack:pkg && npm i @react-native-ohos/react-native-in-app-review@file:../react-native-ohos-react-native-in-app-review-4.4.3-beta.1.tgz",
     "dev": "npm run codegen && react-native bundle-harmony --dev --minify=false",
     "postinstall": "node ./scripts/create-build-profile && node ./scripts/sync-hvigor-plugin",
     "codegen": "react-native codegen-harmony --rnoh-module-path ./harmony/entry/oh_modules/@rnoh/react-native-openharmony"
